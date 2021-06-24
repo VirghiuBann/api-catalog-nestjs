@@ -1,0 +1,7 @@
+### all cats
+GET http://localhost:3000/cats/
+Content-Type: 'application/json'
+
+### Home page
+GET http://localhost:3000/
+Content-Type: 'application/json'
