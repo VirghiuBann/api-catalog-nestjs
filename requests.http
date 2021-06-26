@@ -1,8 +1,8 @@
-### all cats
-GET http://localhost:3000/cats/
-Content-Type: 'application/json'
-
 ### Home page
+GET http://localhost:3000/
+Content-Type: application/json
+
+### get all products
 GET http://localhost:3000/products
 
 ### create products
@@ -10,6 +10,21 @@ POST http://localhost:3000/products
 Content-Type: application/json
 
 {
-  "title": "second product",
-  "description": "same descriptin"
+  "title": "third product",
+  "description": "third product descriptin"
 }
+
+### find product
+GET http://localhost:3000/products/1
+
+### update product
+PATCH http://localhost:3000/products/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "third product updated",
+  "description": "third product descriptin updated"
+}
+
+### delete products
+DELETE http://localhost:3000/products/2021-06-26T00:46:12.662Z
