@@ -1,0 +1,15 @@
+### all cats
+GET http://localhost:3000/cats/
+Content-Type: 'application/json'
+
+### Home page
+GET http://localhost:3000/products
+
+### create products
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "title": "second product",
+  "description": "same descriptin"
+}
