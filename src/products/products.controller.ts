@@ -6,6 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -22,12 +25,19 @@ export class ProductsController {
 
   @Get()
   findAll() {
+    throw new HttpException(
+      {
+        status: HttpStatus.FORBIDDEN,
+        error: 'This is a custom message',
+      },
+      HttpStatus.FORBIDDEN,
+    );
     return this.productsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.findOne(id);
   }
 
   @Patch(':id')
