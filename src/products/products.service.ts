@@ -6,7 +6,7 @@ import { Products } from './interfaces/products.interface';
 
 @Injectable()
 export class ProductsService {
-  public products: Products[] = [];
+  private readonly products: Products[] = [];
 
   create(createProductDto: CreateProductDto) {
     const prodId: number = this.products.length + 1;
