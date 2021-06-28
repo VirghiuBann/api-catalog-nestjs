@@ -9,17 +9,20 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ValidationPipe } from './validations/validation.pipe';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  // @UsePipes(new ValidationPipe(CreateProductDto))
+  create(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
