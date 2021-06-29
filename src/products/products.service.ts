@@ -21,7 +21,7 @@ export class ProductsService {
     return { id: prodId };
   }
 
-  findAll() {
+  findAll(): Products[] {
     return this.products;
   }
 

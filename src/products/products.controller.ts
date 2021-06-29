@@ -17,6 +17,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ValidationPipe } from './validations/validation.pipe';
 import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
+import { Products } from './interfaces/products.interface';
 
 @Controller('products')
 export class ProductsController {
@@ -29,14 +30,14 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    throw new HttpException(
-      {
-        status: HttpStatus.FORBIDDEN,
-        error: 'This is a custom message',
-      },
-      HttpStatus.FORBIDDEN,
-    );
+  async findAll(): Promise<Products[]> {
+    // throw new HttpException(
+    //   {
+    //     status: HttpStatus.FORBIDDEN,
+    //     error: 'This is a custom message',
+    //   },
+    //   HttpStatus.FORBIDDEN,
+    // );
     return this.productsService.findAll();
   }
 
