@@ -10,11 +10,13 @@ import {
   HttpStatus,
   ParseIntPipe,
   UsePipes,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ValidationPipe } from './validations/validation.pipe';
+import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 
 @Controller('products')
 export class ProductsController {
@@ -39,6 +41,7 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @UseInterceptors(LoggingInterceptor)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.findOne(id);
   }
