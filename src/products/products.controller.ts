@@ -16,7 +16,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ValidationPipe } from './validations/validation.pipe';
-import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
+import { LoggingInterceptor } from '../interceptors/logging.interceptor';
 import { Products } from './interfaces/products.interface';
 
 @Controller('products')
