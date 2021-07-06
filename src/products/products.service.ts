@@ -1,59 +1,54 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductDocument, Product } from './entities/product.entity';
 import { Products } from './interfaces/products.interface';
 
 @Injectable()
 export class ProductsService {
-  private readonly products: Products[] = [];
+  constructor(
+    @InjectModel('Product')
+    private readonly productModel: Model<ProductDocument>,
+  ) {}
 
-  create(createProductDto: CreateProductDto) {
-    const prodId: number = this.products.length + 1;
-    const newProduct: Products = {
-      id: prodId,
-      title: createProductDto.title,
-      description: createProductDto.description,
-      createdAt: new Date().toISOString(),
-    };
-    this.products.push(newProduct);
-
-    return { id: prodId };
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    const newProduct = new this.productModel(createProductDto);
+    return newProduct.save();
   }
 
-  findAll(): Products[] {
-    return this.products;
+  async findAll(): Promise<Product[]> {
+    return this.productModel.find().exec();
   }
 
-  findOne(id: number) {
-    let product = this.products.find((item) => item.id == id);
-    let message: {} = {};
+  async findOne(id: string): Promise<Product> {
+    let product = await this.productModel.findById(id);
     if (!product) {
-      message = { message: `Product not found with ID: ${id}` };
+      throw `Product not found with ID: ${id}`;
     }
-    return product ? product : message;
+    return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    let productIndex = this.products.findIndex((item) => item.id == id);
-    if (productIndex != -1) {
-      const product = { ...this.products[productIndex] };
-      product.title = updateProductDto.title;
-      product.description = updateProductDto.description;
-
-      this.products[productIndex] = { ...product };
-
-      return { message: 'updated product successfully' };
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    const oldProduct = await this.productModel.findById(id);
+    if (!oldProduct) {
+      throw 'updated product successfully';
     }
-    return { message: `This product with #${id} not found` };
+    oldProduct.title = updateProductDto.title;
+    oldProduct.description = updateProductDto.description;
+
+    const result = await oldProduct.save();
+    return result;
   }
 
-  remove(id: number) {
-    let productIndex = this.products.findIndex((item) => item.id == id);
-    if (productIndex != -1) {
-      this.products.splice(productIndex, 1);
-      return { message: 'deleted product successfully' };
+  async remove(id: string) {
+    const product = await this.productModel.findByIdAndDelete(id);
+    if (!product) {
+      throw `This product with #${id} not found`;
     }
-    return { message: `This product with #${id} not found` };
+
+    return { message: 'deleted product ' + id };
   }
 }

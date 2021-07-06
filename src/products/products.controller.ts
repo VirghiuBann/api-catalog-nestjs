@@ -25,12 +25,13 @@ export class ProductsController {
 
   @Post()
   // @UsePipes(new ValidationPipe(CreateProductDto))
-  create(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  async create(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
+    const prod = await this.productsService.create(createProductDto);
+    return prod;
   }
 
   @Get()
-  async findAll(): Promise<Products[]> {
+  async findAll() {
     // throw new HttpException(
     //   {
     //     status: HttpStatus.FORBIDDEN,
@@ -43,17 +44,20 @@ export class ProductsController {
 
   @Get(':id')
   @UseInterceptors(LoggingInterceptor)
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return this.productsService.update(id, updateProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.productsService.remove(id);
   }
 }
