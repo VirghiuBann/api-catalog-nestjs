@@ -16,7 +16,6 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ValidationPipe } from './validations/validation.pipe';
 import { LoggingInterceptor } from '../interceptors/logging.interceptor';
-import { Products } from './interfaces/products.interface';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
 
 @Controller('products')
