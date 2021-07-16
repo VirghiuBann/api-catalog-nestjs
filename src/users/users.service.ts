@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -16,6 +21,15 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const existUser = await this.userModel.findOne({
+      email: createUserDto.email,
+    });
+    if (existUser) {
+      throw new HttpException(
+        'email already exists!..',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const newUser = new this.userModel(createUserDto);
     const passwordHash = await generateHash(newUser.password);
     newUser.password = passwordHash;
